@@ -1,4 +1,8 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Entities;
+using Ambev.DeveloperEvaluation.Domain.Events;
+using System.Linq;
+using System.Collections.Generic;
+using System;
 
 namespace Ambev.DeveloperEvaluation.Domain.Common;
 
@@ -7,10 +11,13 @@ namespace Ambev.DeveloperEvaluation.Domain.Common;
 /// </summary>
 public class Sale : BaseEntity
 {
+    private readonly List<IDomainEvent> _domainEvents = new List<IDomainEvent>();
+    public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
+
     /// <summary>
     /// Gets or sets the sale number.
     /// </summary>
-    public string SaleNumber { get; set; }
+    public string SaleNumber { get; private set; }
 
     /// <summary>
     /// Gets or sets the sale date.
@@ -48,7 +55,41 @@ public class Sale : BaseEntity
     public Sale()
     {
         SaleDate = DateTime.UtcNow;
+        SaleNumber = GenerateSaleNumber();
         IsCancelled = false;
+    }
+
+    /// <summary>
+    /// Generates a random sale number (SKU) with letters and numbers.
+    /// </summary>
+    /// <returns>A unique sale number.</returns>
+    private string GenerateSaleNumber()
+    {
+        var random = new Random();
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        return new string(Enumerable.Repeat(chars, 10)
+          .Select(s => s[random.Next(s.Length)]).ToArray());
+    }
+
+    private void AddDomainEvent(IDomainEvent eventItem)
+    {
+        _domainEvents.Add(eventItem);
+    }
+
+    /// <summary>
+    /// Creates the sale and triggers a SaleCreated event.
+    /// </summary>
+    public void Create()
+    {
+        AddDomainEvent(new SaleCreated(this));
+    }
+
+    /// <summary>
+    /// Modifies the sale and triggers a SaleModified event.
+    /// </summary>
+    public void Modify()
+    {
+        AddDomainEvent(new SaleModified(this));
     }
 
     /// <summary>
@@ -71,9 +112,11 @@ public class Sale : BaseEntity
             else if (item.Quantity >= 10 && item.Quantity <= 20)
                 item.ApplyDiscount(0.20m);
             else if (item.Quantity > 20)
-                throw new InvalidOperationException("Não é possível vender acima de 20 itens idênticos.");
+                throw new DomainException("Não é possível vender acima de 20 itens idênticos.");
             else
                 item.ApplyDiscount(0.00m); // Remove desconto se a quantidade for menor que 4
+
+            item.CalculateTotalPrice(); // Atualiza o preço total do item
         }
     }
 
@@ -84,11 +127,12 @@ public class Sale : BaseEntity
     public void AddItem(SaleItem item)
     {
         if (item.Quantity > 20)
-            throw new InvalidOperationException("Não é possível vender acima de 20 itens idênticos.");
+            throw new DomainException("Não é possível vender acima de 20 itens idênticos.");
 
         Items.Add(item);
         ApplyDiscounts();
         CalculateTotal();
+        Modify(); // Trigger SaleModified event due to item addition
     }
 
     /// <summary>
@@ -100,14 +144,16 @@ public class Sale : BaseEntity
         Items.Remove(item);
         ApplyDiscounts();
         CalculateTotal();
+        AddDomainEvent(new ItemCancelled(item)); // Trigger ItemCancelled event
     }
 
     /// <summary>
-    /// Cancels the sale.
+    /// Cancels the sale and triggers a SaleCancelled event.
     /// </summary>
     public void Cancel()
     {
         IsCancelled = true;
+        AddDomainEvent(new SaleCancelled(this));
     }
 
     /// <summary>
