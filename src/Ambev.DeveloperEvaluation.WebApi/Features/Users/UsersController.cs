@@ -8,6 +8,10 @@ using Ambev.DeveloperEvaluation.WebApi.Features.Users.DeleteUser;
 using Ambev.DeveloperEvaluation.Application.Users.CreateUser;
 using Ambev.DeveloperEvaluation.Application.Users.GetUser;
 using Ambev.DeveloperEvaluation.Application.Users.DeleteUser;
+using Ambev.DeveloperEvaluation.Application.Users.ListAllUsers;
+using Ambev.DeveloperEvaluation.WebApi.Features.Users.ListAllUsers;
+using Ambev.DeveloperEvaluation.WebApi.Features.Users.UpdateUser;
+using Ambev.DeveloperEvaluation.Application.Users.UpdateUser;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Users;
 
@@ -91,6 +95,29 @@ public class UsersController : BaseController
     }
 
     /// <summary>
+    /// Lists all users 
+    /// </summary> 
+    /// <param name="cancellationToken">Cancellation token</param> 
+    /// <returns>The list of users</returns>
+    [HttpGet]
+    [ProducesResponseType(typeof(ApiResponseWithData<ListAllUsersResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse),
+        StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult>
+        ListAllUsers(CancellationToken cancellationToken)
+    {
+        var command = new ListAllUsersCommand();
+        var result = await _mediator.Send(command, cancellationToken);
+        var response = _mapper.Map<ListAllUsersResponse>(result);
+        return Ok(new ApiResponseWithData<ListAllUsersResponse>
+        {
+            Success = true,
+            Message = "Users retrieved successfully",
+            Data = response
+        });
+    }
+
+    /// <summary>
     /// Deletes a user by their ID
     /// </summary>
     /// <param name="id">The unique identifier of the user to delete</param>
@@ -116,6 +143,33 @@ public class UsersController : BaseController
         {
             Success = true,
             Message = "User deleted successfully"
+        });
+    }
+
+    /// <summary> 
+    /// Updates an existing user 
+    /// </summary> 
+    /// <param name="id">The unique identifier of the user to update</param> 
+    /// <param name="request">The user update request</param> 
+    /// <param name="cancellationToken">Cancellation token</param> 
+    /// <returns>The updated user details</returns> 
+    [HttpPut("{id}")]
+    [ProducesResponseType(typeof(ApiResponseWithData<UpdateUserResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateUser([FromRoute] Guid id, [FromBody] UpdateUserRequest request, CancellationToken cancellationToken)
+    {
+        request.Id = id;
+        // Ensure the ID from the route is used
+        var validator = new UpdateUserRequestValidator();
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid) return BadRequest(validationResult.Errors);
+        var command = _mapper.Map<UpdateUserCommand>(request); var response = await _mediator.Send(command, cancellationToken);
+        return Ok(new ApiResponseWithData<UpdateUserResponse>
+        {
+            Success = true,
+            Message = "User updated successfully",
+            Data = _mapper.Map<UpdateUserResponse>(response)
         });
     }
 }
