@@ -1,6 +1,6 @@
 ﻿namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.GetSale
 {
-    public class GetSaleItemResult
+    public class GetSaleItemResponse
     {
         public Guid Id { get; set; }
 
@@ -24,5 +24,9 @@
         /// </summary>
         public decimal TotalPrice { get; set; }
 
+        /// <summary>
+        /// The discount.
+        /// </summary>
+        public decimal Discount { get; set; }
     }
 }

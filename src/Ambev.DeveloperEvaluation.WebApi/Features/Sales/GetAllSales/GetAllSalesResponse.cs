@@ -1,14 +1,14 @@
-﻿using Ambev.DeveloperEvaluation.Application.Sales.UpdateSale;
+﻿using Ambev.DeveloperEvaluation.WebApi.Features.Sales.GetSale;
 
-namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale
+namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.GetAllSales
 {
     /// <summary>
-    /// API response model for UpdateSale operation.
+    /// API response model for GetAllSales operation.
     /// </summary>
-    public class UpdateSaleResponse
+    public class GetAllSalesResponse
     {
         /// <summary>
-        /// The unique identifier of the updated sale.
+        /// The unique identifier of the sale.
         /// </summary>
         public Guid Id { get; set; }
 
@@ -40,8 +40,6 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale
         /// <summary>
         /// The list of sale items.
         /// </summary>
-        public List<UpdateSaleItemResponse> Items { get; set; } = new();
+        public List<GetSaleItemResponse> Items { get; set; } = new();
     }
-
-    
 }

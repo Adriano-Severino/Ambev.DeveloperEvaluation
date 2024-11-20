@@ -1,12 +1,12 @@
-﻿namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale;
+﻿namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.GetSale;
 
 /// <summary>
-/// API response model for CreateSale operation.
+/// API response model for GetSale operation.
 /// </summary>
-public class CreateSaleResponse
+public class GetSaleResponse
 {
     /// <summary>
-    /// The unique identifier of the created sale.
+    /// The unique identifier of the sale.
     /// </summary>
     public Guid Id { get; set; }
 
@@ -38,7 +38,5 @@ public class CreateSaleResponse
     /// <summary>
     /// The list of sale items.
     /// </summary>
-    public List<CreateSaleItemResponse> Items { get; set; } = new();
+    public List<GetSaleItemResponse> Items { get; set; } = new();
 }
-
-
