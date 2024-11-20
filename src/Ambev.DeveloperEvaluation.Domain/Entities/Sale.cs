@@ -71,9 +71,14 @@ public class Sale : BaseEntity
           .Select(s => s[random.Next(s.Length)]).ToArray());
     }
 
-    private void AddDomainEvent(IDomainEvent eventItem)
+    protected void AddDomainEvent(IDomainEvent eventItem)
     {
         _domainEvents.Add(eventItem);
+    }
+
+    public void ClearDomainEvents()
+    {
+        _domainEvents.Clear();
     }
 
     /// <summary>
