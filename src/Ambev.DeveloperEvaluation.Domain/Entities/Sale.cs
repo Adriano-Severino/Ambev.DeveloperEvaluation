@@ -132,7 +132,7 @@ public class Sale : BaseEntity
         Items.Add(item);
         ApplyDiscounts();
         CalculateTotal();
-        Modify(); // Trigger SaleModified event due to item addition
+        Modify();
     }
 
     /// <summary>
@@ -144,7 +144,7 @@ public class Sale : BaseEntity
         Items.Remove(item);
         ApplyDiscounts();
         CalculateTotal();
-        AddDomainEvent(new ItemCancelled(item)); // Trigger ItemCancelled event
+        AddDomainEvent(new ItemCancelled(item));
     }
 
     /// <summary>
