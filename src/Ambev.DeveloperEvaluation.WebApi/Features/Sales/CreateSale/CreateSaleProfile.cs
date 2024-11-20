@@ -15,19 +15,14 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale
         /// </summary>
         public CreateSaleProfile()
         {
-            // Mapeamento para CreateSaleRequest para CreateSaleCommand
             CreateMap<CreateSaleRequest, CreateSaleCommand>()
                 .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items));
             CreateMap<CreateSaleItemRequest, CreateSaleItemCommand>();
 
-           
-
-            // Mapeamento para CreateSaleResult para CreateSaleResponse
             CreateMap<CreateSaleResult, CreateSaleResponse>()
                 .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items));
             CreateMap<CreateSaleItemResult, CreateSaleItemResponse>();
 
-            // Mapeamento inverso (se necessário)
             CreateMap<CreateSaleResponse, CreateSaleResult>()
                 .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items));
         }
