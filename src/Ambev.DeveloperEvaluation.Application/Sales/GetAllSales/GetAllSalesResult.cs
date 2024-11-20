@@ -1,9 +1,13 @@
-﻿namespace Ambev.DeveloperEvaluation.Application.Sales.UpdateSale
+﻿using Ambev.DeveloperEvaluation.Application.Sales.GetAllSales;
+using System;
+using System.Collections.Generic;
+
+namespace Ambev.DeveloperEvaluation.Application.Sales.GetSale
 {
     /// <summary>
-    /// Represents the response returned after successfully updating a sale.
+    /// Represents the result of a GetSale operation.
     /// </summary>
-    public class UpdateSaleResult
+    public class GetAllSalesResult
     {
         public Guid Id { get; set; }
         public string SaleNumber { get; set; } = string.Empty;
@@ -11,7 +15,8 @@
         public string Customer { get; set; } = string.Empty;
         public string Branch { get; set; } = string.Empty;
         public decimal TotalAmount { get; set; }
-        public List<UpdateSaleItemResult> Items { get; set; } = new();
+        public List<GetAllSaleItemResult> Items { get; set; } = new();
     }
 
+    
 }

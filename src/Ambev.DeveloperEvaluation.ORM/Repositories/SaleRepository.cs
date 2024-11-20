@@ -49,6 +49,11 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
             return await _context.Sales.FirstOrDefaultAsync(sale => sale.Id == id, cancellationToken);
         }
 
+        public async Task<IEnumerable<Sale>> GetAllAsync(CancellationToken cancellationToken = default)
+        {
+            return await _context.Sales.AsNoTracking().ToListAsync(cancellationToken);
+        }
+
         /// <summary>
         /// Updates an existing sale in the database
         /// </summary>
