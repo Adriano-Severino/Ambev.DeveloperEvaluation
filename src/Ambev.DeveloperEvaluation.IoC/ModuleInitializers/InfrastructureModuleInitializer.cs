@@ -33,10 +33,8 @@ namespace Ambev.DeveloperEvaluation.IoC.ModuleInitializers
             builder.Services.AddTransient<INotificationHandler<ItemCancelled>, SaleEventHandler>();
 
             // Registro dos validadores
-            //builder.Services.AddTransient<IValidator<CreateSaleRequest>, CreateSaleRequestValidator>();
             builder.Services.AddTransient<IValidator<GetSaleRequest>, GetSaleRequestValidator>();
             builder.Services.AddTransient<IValidator<UpdateSaleRequest>, UpdateSaleRequestValidator>();
-            //builder.Services.AddTransient<IValidator<DeleteSaleRequest>, DeleteSaleRequestValidator>();
             builder.Services.AddTransient<IValidator<DeleteSaleCommand>, DeleteSaleCommandValidator>();
 
             // Registro dos handlers
