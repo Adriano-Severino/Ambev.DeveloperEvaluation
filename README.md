@@ -1,4 +1,4 @@
-# Test Desbravador 
+# Developer Evaluation Project
 This is the backend api to generate this application you need to have visual studio 2022 or installed the .net core 7.0 sdk
 Run the Update-Database command in the package management console to create tables in the database
 
