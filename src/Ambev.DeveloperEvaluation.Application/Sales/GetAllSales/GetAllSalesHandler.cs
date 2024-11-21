@@ -1,26 +1,24 @@
-﻿using MediatR;
-using AutoMapper;
+﻿using Ambev.DeveloperEvaluation.Application.Sales.GetSale;
+using Ambev.DeveloperEvaluation.Common.Pagination;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Ambev.DeveloperEvaluation.Application.Sales.GetSale;
+using AutoMapper;
+using MediatR;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.GetAllSales
 {
     /// <summary>
-    /// Handler for processing GetAllSalesCommand requests
+    /// Handler for processing GetAllSalesCommand requests.
     /// </summary>
-    public class GetAllSalesHandler : IRequestHandler<GetAllSalesCommand, List<GetAllSalesResult>>
+    public class GetAllSalesHandler : IRequestHandler<GetAllSalesCommand, PaginatedList<GetAllSalesResult>>
     {
         private readonly ISaleRepository _saleRepository;
         private readonly IMapper _mapper;
 
         /// <summary>
-        /// Initializes a new instance of GetAllSalesHandler
+        /// Initializes a new instance of GetAllSalesHandler.
         /// </summary>
-        /// <param name="saleRepository">The sale repository</param>
-        /// <param name="mapper">The AutoMapper instance</param>
+        /// <param name="saleRepository">The sale repository.</param>
+        /// <param name="mapper">The AutoMapper instance.</param>
         public GetAllSalesHandler(ISaleRepository saleRepository, IMapper mapper)
         {
             _saleRepository = saleRepository;
@@ -28,15 +26,17 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.GetAllSales
         }
 
         /// <summary>
-        /// Handles the GetAllSalesCommand request
+        /// Handles the GetAllSalesCommand request.
         /// </summary>
-        /// <param name="command">The GetAllSales command</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>A list of sales</returns>
-        public async Task<List<GetAllSalesResult>> Handle(GetAllSalesCommand command, CancellationToken cancellationToken)
+        /// <param name="command">The GetAllSales command.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>A paginated list of sales.</returns>
+        public async Task<PaginatedList<GetAllSalesResult>> Handle(GetAllSalesCommand command, CancellationToken cancellationToken)
         {
-            var sales = await _saleRepository.GetAllAsync(cancellationToken);
-            return _mapper.Map<List<GetAllSalesResult>>(sales);
+            var paginatedSales = await _saleRepository.GetPagedSalesAsync(command.PageNumber, command.PageSize, cancellationToken);
+            var mappedSales = _mapper.Map<List<GetAllSalesResult>>(paginatedSales);
+
+            return new PaginatedList<GetAllSalesResult>(mappedSales, paginatedSales.TotalCount, command.PageNumber, command.PageSize);
         }
     }
 }

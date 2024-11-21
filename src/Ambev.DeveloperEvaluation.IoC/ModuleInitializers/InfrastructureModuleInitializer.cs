@@ -3,6 +3,7 @@ using Ambev.DeveloperEvaluation.Application.Sales.DeleteSale;
 using Ambev.DeveloperEvaluation.Application.Sales.GetAllSales;
 using Ambev.DeveloperEvaluation.Application.Sales.GetSale;
 using Ambev.DeveloperEvaluation.Application.Sales.UpdateSale;
+using Ambev.DeveloperEvaluation.Common.Pagination;
 using Ambev.DeveloperEvaluation.Domain.Events;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using Ambev.DeveloperEvaluation.Infrastructure.Handlers;
@@ -45,7 +46,7 @@ namespace Ambev.DeveloperEvaluation.IoC.ModuleInitializers
 
             // Registro dos handlers
             builder.Services.AddTransient<IRequestHandler<CreateSaleCommand, CreateSaleResult>, CreateSaleHandler>();
-            builder.Services.AddTransient<IRequestHandler<GetAllSalesCommand, List<GetAllSalesResult>>, GetAllSalesHandler>();
+            builder.Services.AddTransient<IRequestHandler<GetAllSalesCommand, PaginatedList<GetAllSalesResult>>, GetAllSalesHandler>();
             builder.Services.AddTransient<IRequestHandler<GetSaleCommand, GetSaleResult>, GetSaleHandler>();
             builder.Services.AddTransient<IRequestHandler<UpdateSaleCommand, UpdateSaleResult>, UpdateSaleHandler>();
             builder.Services.AddTransient<IRequestHandler<DeleteSaleCommand, Unit>, DeleteSaleHandler>();

@@ -11,6 +11,7 @@ using Ambev.DeveloperEvaluation.Application.Sales.GetSale;
 using Ambev.DeveloperEvaluation.Application.Sales.DeleteSale;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale;
 using Ambev.DeveloperEvaluation.Application.Sales.UpdateSale;
+using Ambev.DeveloperEvaluation.Common.Pagination;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales
 {
@@ -99,19 +100,18 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A response with the list of all sales.</returns>
         [HttpGet]
-        [ProducesResponseType(typeof(ApiResponseWithData<List<GetSaleResponse>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponseWithData<PaginatedResponse<GetSaleResponse>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetAllSales(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAllSales(int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
         {
-            var command = new GetAllSalesCommand();
-            var response = await _mediator.Send(command, cancellationToken);
-
-            return Ok(new ApiResponseWithData<List<GetSaleResponse>>
+            var command = new GetAllSalesCommand
             {
-                Success = true,
-                Message = "Sales retrieved successfully",
-                Data = _mapper.Map<List<GetSaleResponse>>(response)
-            });
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
+            var response = await _mediator.Send(command, cancellationToken);
+            var paginatedList = new PaginatedList<GetSaleResponse>(_mapper.Map<List<GetSaleResponse>>(response), response.TotalCount, pageNumber, pageSize);
+            return OkPaginated(paginatedList);
         }
 
         /// <summary>

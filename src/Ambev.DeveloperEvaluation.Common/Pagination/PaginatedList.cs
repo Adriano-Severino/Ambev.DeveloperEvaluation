@@ -1,10 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Ambev.DeveloperEvaluation.WebApi.Common
+namespace Ambev.DeveloperEvaluation.Common.Pagination
 {
     /// <summary>
     /// Represents a paginated list of items.

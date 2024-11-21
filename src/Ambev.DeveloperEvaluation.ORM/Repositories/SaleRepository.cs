@@ -1,4 +1,5 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Common;
+﻿using Ambev.DeveloperEvaluation.Common.Pagination;
+using Ambev.DeveloperEvaluation.Domain.Common;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -52,16 +53,16 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
         }
 
         /// <summary>
-        /// Retrieves all sales from the database.
+        /// Retrieves a paginated list of sales from the database.
         /// </summary>
+        /// <param name="pageNumber">The page number to retrieve.</param>
+        /// <param name="pageSize">The number of items per page.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
-        /// <returns>A list of all sales.</returns>
-        public async Task<IEnumerable<Sale>> GetAllAsync(CancellationToken cancellationToken = default)
+        /// <returns>A paginated list of sales.</returns>
+        public async Task<PaginatedList<Sale>> GetPagedSalesAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default)
         {
-            return await _context.Sales
-                .Include(s => s.Items)
-                .AsNoTracking()
-                .ToListAsync(cancellationToken);
+            var query = _context.Sales.AsNoTracking().Include(s => s.Items);
+            return await PaginatedList<Sale>.CreateAsync(query, pageNumber, pageSize);
         }
 
         /// <summary>

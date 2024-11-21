@@ -160,7 +160,6 @@ public class UsersController : BaseController
     public async Task<IActionResult> UpdateUser([FromRoute] Guid id, [FromBody] UpdateUserRequest request, CancellationToken cancellationToken)
     {
         request.Id = id;
-        // Ensure the ID from the route is used
         var validator = new UpdateUserRequestValidator();
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid) return BadRequest(validationResult.Errors);
