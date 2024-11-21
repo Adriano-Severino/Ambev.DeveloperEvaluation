@@ -1,14 +1,22 @@
 ﻿using Ambev.DeveloperEvaluation.IoC.ModuleInitializers;
 using Microsoft.AspNetCore.Builder;
 
-namespace Ambev.DeveloperEvaluation.IoC;
-
-public static class DependencyResolver
+namespace Ambev.DeveloperEvaluation.IoC
 {
-    public static void RegisterDependencies(this WebApplicationBuilder builder)
+    /// <summary>
+    /// Resolves and registers application dependencies.
+    /// </summary>
+    public static class DependencyResolver
     {
-        new ApplicationModuleInitializer().Initialize(builder);
-        new InfrastructureModuleInitializer().Initialize(builder);
-        new WebApiModuleInitializer().Initialize(builder);
+        /// <summary>
+        /// Registers dependencies with the specified web application builder.
+        /// </summary>
+        /// <param name="builder">The web application builder.</param>
+        public static void RegisterDependencies(this WebApplicationBuilder builder)
+        {
+            new ApplicationModuleInitializer().Initialize(builder);
+            new InfrastructureModuleInitializer().Initialize(builder);
+            new WebApiModuleInitializer().Initialize(builder);
+        }
     }
 }

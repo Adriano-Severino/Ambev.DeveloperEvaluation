@@ -6,8 +6,14 @@ using Ambev.DeveloperEvaluation.Domain.Common;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales
 {
+    /// <summary>
+    /// Profile for AutoMapper configuration for sales related mappings.
+    /// </summary>
     public class GetSalesProfile : Profile
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetSalesProfile"/> class.
+        /// </summary>
         public GetSalesProfile()
         {
             CreateMap<Sale, GetSaleResult>()

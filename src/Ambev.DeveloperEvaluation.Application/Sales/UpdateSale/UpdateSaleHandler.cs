@@ -7,19 +7,32 @@ using MediatR;
 namespace Ambev.DeveloperEvaluation.Application.Sales.UpdateSale
 {
     /// <summary>
-    /// Handler for processing UpdateSaleCommand requests
+    /// Handler for processing UpdateSaleCommand requests.
     /// </summary>
     public class UpdateSaleHandler : IRequestHandler<UpdateSaleCommand, UpdateSaleResult>
     {
         private readonly ISaleRepository _saleRepository;
         private readonly IMapper _mapper;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UpdateSaleHandler"/> class.
+        /// </summary>
+        /// <param name="saleRepository">The sale repository instance.</param>
+        /// <param name="mapper">The AutoMapper instance.</param>
         public UpdateSaleHandler(ISaleRepository saleRepository, IMapper mapper)
         {
             _saleRepository = saleRepository;
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Handles the UpdateSaleCommand request.
+        /// </summary>
+        /// <param name="command">The update sale command.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The result of the update operation.</returns>
+        /// <exception cref="ValidationException">Thrown when the validation fails.</exception>
+        /// <exception cref="KeyNotFoundException">Thrown when the sale is not found.</exception>
         public async Task<UpdateSaleResult> Handle(UpdateSaleCommand command, CancellationToken cancellationToken)
         {
             var validator = new UpdateSaleCommandValidator();

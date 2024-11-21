@@ -1,6 +1,6 @@
-﻿using MediatR;
-using Ambev.DeveloperEvaluation.Common.Validation;
+﻿using Ambev.DeveloperEvaluation.Common.Validation;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale;
+using MediatR;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.UpdateSale
 {

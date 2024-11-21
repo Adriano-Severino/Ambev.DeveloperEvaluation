@@ -15,7 +15,7 @@ using Ambev.DeveloperEvaluation.Application.Sales.UpdateSale;
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales
 {
     /// <summary>
-    /// Controller for managing sales operations
+    /// Controller for managing sales operations.
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
@@ -24,12 +24,23 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SalesController"/> class.
+        /// </summary>
+        /// <param name="mediator">The mediator instance.</param>
+        /// <param name="mapper">The AutoMapper instance.</param>
         public SalesController(IMediator mediator, IMapper mapper)
         {
             _mediator = mediator;
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Creates a new sale.
+        /// </summary>
+        /// <param name="request">The create sale request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A response with the created sale data.</returns>
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponseWithData<CreateSaleResponse>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
@@ -52,6 +63,12 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales
             });
         }
 
+        /// <summary>
+        /// Retrieves a sale by its ID.
+        /// </summary>
+        /// <param name="id">The sale ID.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A response with the sale data.</returns>
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ApiResponseWithData<GetSaleResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
@@ -76,6 +93,11 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales
             });
         }
 
+        /// <summary>
+        /// Retrieves all sales.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A response with the list of all sales.</returns>
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponseWithData<List<GetSaleResponse>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
@@ -92,6 +114,12 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales
             });
         }
 
+        /// <summary>
+        /// Deletes a sale by its ID.
+        /// </summary>
+        /// <param name="id">The sale ID.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A response indicating the result of the delete operation.</returns>
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
@@ -115,6 +143,13 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales
             });
         }
 
+        /// <summary>
+        /// Updates a sale.
+        /// </summary>
+        /// <param name="id">The sale ID.</param>
+        /// <param name="request">The update sale request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A response with the updated sale data.</returns>
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(ApiResponseWithData<UpdateSaleResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]

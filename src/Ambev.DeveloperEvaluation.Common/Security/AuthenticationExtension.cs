@@ -7,8 +7,17 @@ using System.Text;
 
 namespace Ambev.DeveloperEvaluation.Common.Security
 {
+    /// <summary>
+    /// Provides extension methods for adding JWT authentication.
+    /// </summary>
     public static class AuthenticationExtension
     {
+        /// <summary>
+        /// Adds JWT authentication to the specified service collection.
+        /// </summary>
+        /// <param name="services">The service collection.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>The service collection.</returns>
         public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();

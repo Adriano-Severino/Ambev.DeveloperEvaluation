@@ -6,24 +6,33 @@ using Ambev.DeveloperEvaluation.WebApi.Features.Sales.GetAllSales;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.GetSale;
 using AutoMapper;
 
-public class GetAllSalesProfile : Profile
+namespace Ambev.DeveloperEvaluation.WebApi.Mapping
 {
-    public GetAllSalesProfile()
+    /// <summary>
+    /// Profile for AutoMapper configuration for sales related mappings.
+    /// </summary>
+    public class GetAllSalesProfile : Profile
     {
-        CreateMap<Sale, GetSaleResult>()
-            .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items));
-        CreateMap<SaleItem, GetSaleItemResult>();
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetAllSalesProfile"/> class.
+        /// </summary>
+        public GetAllSalesProfile()
+        {
+            CreateMap<Sale, GetSaleResult>()
+                .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items));
+            CreateMap<SaleItem, GetSaleItemResult>();
 
-        CreateMap<Sale, GetAllSalesResponse>()
-            .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items));
-        CreateMap<SaleItem, GetSaleItemResponse>();
+            CreateMap<Sale, GetAllSalesResponse>()
+                .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items));
+            CreateMap<SaleItem, GetSaleItemResponse>();
 
-        CreateMap<Sale, GetAllSalesResult>()
-            .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items));
-        CreateMap<SaleItem, GetAllSaleItemResult>();
+            CreateMap<Sale, GetAllSalesResult>()
+                .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items));
+            CreateMap<SaleItem, GetAllSaleItemResult>();
 
-        CreateMap<GetAllSalesResult, GetSaleResponse>()
-            .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items));
-        CreateMap<GetAllSaleItemResult, GetSaleItemResponse>();
+            CreateMap<GetAllSalesResult, GetSaleResponse>()
+                .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items));
+            CreateMap<GetAllSaleItemResult, GetSaleItemResponse>();
+        }
     }
 }

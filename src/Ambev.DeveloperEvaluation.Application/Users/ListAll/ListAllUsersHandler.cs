@@ -1,8 +1,7 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using Ambev.DeveloperEvaluation.Domain.Dto;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
-using Ambev.DeveloperEvaluation.Domain.Entities;
-using Ambev.DeveloperEvaluation.Domain.Dto;
+using AutoMapper;
+using MediatR;
 
 namespace Ambev.DeveloperEvaluation.Application.Users.ListAllUsers
 {

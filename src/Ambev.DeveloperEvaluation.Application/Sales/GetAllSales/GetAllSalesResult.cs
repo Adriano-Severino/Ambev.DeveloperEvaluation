@@ -1,6 +1,4 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Sales.GetAllSales;
-using System;
-using System.Collections.Generic;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.GetSale
 {

@@ -1,6 +1,4 @@
 ﻿using Ambev.DeveloperEvaluation.WebApi.Features.Sales.GetSale;
-using System;
-using System.Collections.Generic;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.GetSale;
 

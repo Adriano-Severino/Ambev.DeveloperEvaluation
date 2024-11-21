@@ -8,7 +8,6 @@ using Ambev.DeveloperEvaluation.Domain.Repositories;
 using Ambev.DeveloperEvaluation.Infrastructure.Handlers;
 using Ambev.DeveloperEvaluation.ORM;
 using Ambev.DeveloperEvaluation.ORM.Repositories;
-using Ambev.DeveloperEvaluation.WebApi.Features.Sales;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -17,8 +16,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Ambev.DeveloperEvaluation.IoC.ModuleInitializers
 {
+    /// <summary>
+    /// Initializes infrastructure modules and registers services.
+    /// </summary>
     public class InfrastructureModuleInitializer : IModuleInitializer
     {
+        /// <summary>
+        /// Initializes the module and registers services with the specified web application builder.
+        /// </summary>
+        /// <param name="builder">The web application builder.</param>
         public void Initialize(WebApplicationBuilder builder)
         {
             // Registro dos repositórios
@@ -43,7 +49,6 @@ namespace Ambev.DeveloperEvaluation.IoC.ModuleInitializers
             builder.Services.AddTransient<IRequestHandler<GetSaleCommand, GetSaleResult>, GetSaleHandler>();
             builder.Services.AddTransient<IRequestHandler<UpdateSaleCommand, UpdateSaleResult>, UpdateSaleHandler>();
             builder.Services.AddTransient<IRequestHandler<DeleteSaleCommand, Unit>, DeleteSaleHandler>();
-
         }
     }
 }
