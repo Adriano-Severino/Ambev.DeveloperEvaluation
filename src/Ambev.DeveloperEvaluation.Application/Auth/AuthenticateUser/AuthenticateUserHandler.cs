@@ -27,7 +27,7 @@ namespace Ambev.DeveloperEvaluation.Application.Auth.AuthenticateUser
         {
             var user = await _userRepository.GetByEmailAsync(request.Email, cancellationToken);
             
-            if (user == null || !_passwordHasher.VerifyPassword(request.Password, user.Password))
+            if (user == null || !_passwordHasher.VerifyPassword(request.Password, user.Password.Value))
             {
                 throw new UnauthorizedAccessException("Invalid credentials");
             }
@@ -43,7 +43,7 @@ namespace Ambev.DeveloperEvaluation.Application.Auth.AuthenticateUser
             return new AuthenticateUserResult
             {
                 Token = token,
-                Email = user.Email,
+                Email = user.Email.Value,
                 Name = user.Username,
                 Role = user.Role.ToString()
             };

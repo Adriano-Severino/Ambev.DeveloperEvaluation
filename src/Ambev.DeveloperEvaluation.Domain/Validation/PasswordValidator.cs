@@ -3,22 +3,19 @@
 namespace Ambev.DeveloperEvaluation.Domain.Validation
 {
     /// <summary>
-    /// Validator for validating passwords.
+    /// Validator for Password value object.
     /// </summary>
     public class PasswordValidator : AbstractValidator<string>
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PasswordValidator"/> class.
-        /// </summary>
         public PasswordValidator()
         {
             RuleFor(password => password)
-                .NotEmpty()
-                .MinimumLength(8)
-                .Matches(@"[A-Z]+").WithMessage("Password must contain at least one uppercase letter.")
-                .Matches(@"[a-z]+").WithMessage("Password must contain at least one lowercase letter.")
-                .Matches(@"[0-9]+").WithMessage("Password must contain at least one number.")
-                .Matches(@"[\!\?\*\.\@\#\$\%\^\&\+\=]+").WithMessage("Password must contain at least one special character.");
+                .NotEmpty().WithMessage("Password is required.")
+                .MinimumLength(8).WithMessage("Password must be at least 8 characters long.")
+                .Matches(@"[A-Z]").WithMessage("Password must contain at least one uppercase letter.")
+                .Matches(@"[a-z]").WithMessage("Password must contain at least one lowercase letter.")
+                .Matches(@"\d").WithMessage("Password must contain at least one number.")
+                .Matches(@"[\W_]").WithMessage("Password must contain at least one special character.");
         }
     }
 }

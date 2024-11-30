@@ -4,6 +4,7 @@ using FluentValidation;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Common.Security;
+using Ambev.DeveloperEvaluation.Domain.ValueObjects;
 
 namespace Ambev.DeveloperEvaluation.Application.Users.UpdateUser
 {
@@ -48,7 +49,9 @@ namespace Ambev.DeveloperEvaluation.Application.Users.UpdateUser
                 throw new InvalidOperationException($"User with ID {command.Id} not found");
 
             _mapper.Map(command, existingUser);
-            existingUser.Password = _passwordHasher.HashPassword(command.Password);
+
+            // Criação de uma nova instância do objeto de valor Password
+            existingUser.SetPassword(new Password(command.Password));
 
             var updatedUser = await _userRepository.UpdateAsync(existingUser, cancellationToken);
             var result = _mapper.Map<UpdateUserResult>(updatedUser);

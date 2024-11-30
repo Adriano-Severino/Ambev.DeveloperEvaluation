@@ -6,8 +6,16 @@ using Xunit;
 
 namespace Ambev.DeveloperEvaluation.Unit.Domain.Specifications
 {
+    /// <summary>
+    /// Contains unit tests for the <see cref="ActiveUserSpecification"/> class.
+    /// </summary>
     public class ActiveUserSpecificationTests
     {
+        /// <summary>
+        /// Verifies that the <see cref="ActiveUserSpecification"/> correctly validates user status.
+        /// </summary>
+        /// <param name="status">The user status to be validated.</param>
+        /// <param name="expectedResult">The expected result of the validation.</param>
         [Theory]
         [InlineData(UserStatus.Active, true)]
         [InlineData(UserStatus.Inactive, false)]

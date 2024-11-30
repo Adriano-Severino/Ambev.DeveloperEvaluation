@@ -1,5 +1,6 @@
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Enums;
+using Ambev.DeveloperEvaluation.Domain.ValueObjects;
 using Bogus;
 
 namespace Ambev.DeveloperEvaluation.Unit.Domain.Specifications.TestData;
@@ -16,21 +17,19 @@ public static class ActiveUserSpecificationTestData
     /// The generated users will have valid:
     /// - Email (valid format)
     /// - Password (meeting complexity requirements)
-    /// - FirstName
-    /// - LastName
+    /// - Username
     /// - Phone (Brazilian format)
     /// - Role (User)
     /// Status is not set here as it's the main test parameter
     /// </summary>
     private static readonly Faker<User> userFaker = new Faker<User>()
-        .CustomInstantiator(f => new User {
-            Email = f.Internet.Email(),
-            Password = $"Test@{f.Random.Number(100, 999)}",
-            Username = f.Name.FirstName(),
-            Status = f.PickRandom<UserStatus>(),
-            Phone = $"+55{f.Random.Number(11, 99)}{f.Random.Number(100000000, 999999999)}",
-            Role = f.PickRandom<UserRole> ()
-        });
+        .CustomInstantiator(f => new User(
+            f.Internet.UserName(),
+            new Email(f.Internet.Email()),
+            new PhoneNumber($"+55{f.Random.Number(11, 99)}{f.Random.Number(100000000, 999999999)}"),
+            new Password($"Test@{f.Random.Number(100, 999)}"),
+            f.PickRandom<UserRole>()
+        ));
 
     /// <summary>
     /// Generates a valid User entity with the specified status.
@@ -40,7 +39,28 @@ public static class ActiveUserSpecificationTestData
     public static User GenerateUser(UserStatus status)
     {
         var user = userFaker.Generate();
-        user.Status = status;
+        SetUserStatus(user, status);
         return user;
+    }
+
+    /// <summary>
+    /// Sets the status of the user based on the provided status.
+    /// </summary>
+    /// <param name="user">The user to set the status for.</param>
+    /// <param name="status">The status to set.</param>
+    private static void SetUserStatus(User user, UserStatus status)
+    {
+        if (status == UserStatus.Active)
+        {
+            user.Activate();
+        }
+        else if (status == UserStatus.Inactive)
+        {
+            user.Deactivate();
+        }
+        else if (status == UserStatus.Suspended)
+        {
+            user.Suspend();
+        }
     }
 }

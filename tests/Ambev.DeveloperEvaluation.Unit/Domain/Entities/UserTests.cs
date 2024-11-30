@@ -1,5 +1,7 @@
+using Ambev.DeveloperEvaluation.Common.Validation;
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Enums;
+using Ambev.DeveloperEvaluation.Domain.ValueObjects;
 using Ambev.DeveloperEvaluation.Unit.Domain.Entities.TestData;
 using Xunit;
 
@@ -19,7 +21,7 @@ public class UserTests
     {
         // Arrange
         var user = UserTestData.GenerateValidUser();
-        user.Status = UserStatus.Suspended;
+        user.Suspend(); // Ensure the user is suspended before activation
 
         // Act
         user.Activate();
@@ -36,7 +38,6 @@ public class UserTests
     {
         // Arrange
         var user = UserTestData.GenerateValidUser();
-        user.Status = UserStatus.Active;
 
         // Act
         user.Suspend();
@@ -68,22 +69,62 @@ public class UserTests
     [Fact(DisplayName = "Validation should fail for invalid user data")]
     public void Given_InvalidUserData_When_Validated_Then_ShouldReturnInvalid()
     {
-        // Arrange
-        var user = new User
+        // List to store exception error details
+        List<ValidationErrorDetail> exceptionErrors = new List<ValidationErrorDetail>();
+
+        // Try to create each VO and capture exceptions for invalid values
+        try
         {
-            Username = "", // Invalid: empty
-            Password = UserTestData.GenerateInvalidPassword(), // Invalid: doesn't meet password requirements
-            Email = UserTestData.GenerateInvalidEmail(), // Invalid: not a valid email
-            Phone = UserTestData.GenerateInvalidPhone(), // Invalid: doesn't match pattern
-            Status = UserStatus.Unknown, // Invalid: cannot be Unknown
-            Role = UserRole.None // Invalid: cannot be None
-        };
+            var invalidEmail = new Email(UserTestData.GenerateInvalidEmail());
+        }
+        catch (DomainException ex)
+        {
+            exceptionErrors.Add(new ValidationErrorDetail { Detail = ex.Message });
+        }
+
+        try
+        {
+            var invalidPhone = new PhoneNumber(UserTestData.GenerateInvalidPhone());
+        }
+        catch (DomainException ex)
+        {
+            exceptionErrors.Add(new ValidationErrorDetail { Detail = ex.Message });
+        }
+
+        try
+        {
+            var invalidPassword = new Password(UserTestData.GenerateInvalidPassword());
+        }
+        catch (DomainException ex)
+        {
+            exceptionErrors.Add(new ValidationErrorDetail { Detail = ex.Message });
+        }
+
+        // Create the user with valid data to avoid exceptions during validation
+        var user = new User(
+            "", // Invalid: empty
+            new Email(UserTestData.GenerateValidEmail()),
+            new PhoneNumber(UserTestData.GenerateValidPhone()),
+            new Password(UserTestData.GenerateValidPassword()), 
+            UserRole.None
+        );
+
+        // Set status to Unknown
+        user.SetStatus(UserStatus.Unknown);
 
         // Act
         var result = user.Validate();
+        var validationErrors = result.Errors.Select(e => new ValidationErrorDetail { Detail = e.Detail, Error = e.Error }).ToList();
+        var allErrors = exceptionErrors.Concat(validationErrors).ToList();
 
         // Assert
         Assert.False(result.IsValid);
-        Assert.NotEmpty(result.Errors);
+        Assert.NotEmpty(allErrors);
+        Assert.Contains(allErrors, e => e.Detail.Contains("Invalid email format"));
+        Assert.Contains(allErrors, e => e.Detail.Contains("Invalid phone number format"));
+        Assert.Contains(allErrors, e => e.Detail.Contains("Password does not meet complexity requirements"));
+        Assert.Contains(allErrors, e => e.Detail.Contains("Username must be at least 3 characters long."));
+        Assert.Contains(allErrors, e => e.Detail.Contains("User status cannot be Unknown."));
+        Assert.Contains(allErrors, e => e.Detail.Contains("User role cannot be None."));
     }
 }

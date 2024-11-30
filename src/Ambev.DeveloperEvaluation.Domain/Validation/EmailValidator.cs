@@ -4,13 +4,10 @@ using System.Text.RegularExpressions;
 namespace Ambev.DeveloperEvaluation.Domain.Validation
 {
     /// <summary>
-    /// Validator for validating email addresses.
+    /// Validator for Email value object.
     /// </summary>
     public class EmailValidator : AbstractValidator<string>
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EmailValidator"/> class.
-        /// </summary>
         public EmailValidator()
         {
             RuleFor(email => email)

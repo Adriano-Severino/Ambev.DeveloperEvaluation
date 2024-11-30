@@ -56,7 +56,7 @@ public class PasswordValidatorTests
     /// <param name="password">The short password to test.</param>
     [Theory(DisplayName = "Password shorter than minimum length should fail validation")]
     [InlineData("Test@1")] // 6 characters
-    [InlineData("Pass#2")] // 7 characters
+    [InlineData("Pass#2@")] // 7 characters
     public void Given_PasswordShorterThanMinimum_When_Validated_Then_ShouldHaveError(string password)
     {
         // Act

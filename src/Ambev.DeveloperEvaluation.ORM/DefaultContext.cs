@@ -1,7 +1,9 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Common;
 using Ambev.DeveloperEvaluation.Domain.Entities;
+using Ambev.DeveloperEvaluation.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Configuration;
 using System.Reflection;
 
@@ -42,8 +44,27 @@ namespace Ambev.DeveloperEvaluation.ORM
         /// <param name="modelBuilder">The builder being used to construct the model for this context.</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.Property(e => e.Email)
+                    .HasConversion(new ValueConverter<Email, string>(
+                        v => v.Value,
+                        v => new Email(v)));
+
+                entity.Property(e => e.Phone)
+                    .HasConversion(new ValueConverter<PhoneNumber, string>(
+                        v => v.Value,
+                        v => new PhoneNumber(v)));
+
+                entity.Property(e => e.Password)
+                    .HasConversion(new ValueConverter<Password, string>(
+                        v => v.Value,
+                        v => new Password(v)));
+            });
+
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 
@@ -59,8 +80,9 @@ namespace Ambev.DeveloperEvaluation.ORM
         /// <returns>A new instance of DefaultContext.</returns>
         public DefaultContext CreateDbContext(string[] args)
         {
+            // Caminho base ajustado para garantir que o appsettings.json seja encontrado
             IConfigurationRoot configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(Directory.GetParent(Directory.GetCurrentDirectory()).FullName)
                 .AddJsonFile("appsettings.json")
                 .Build();
 
