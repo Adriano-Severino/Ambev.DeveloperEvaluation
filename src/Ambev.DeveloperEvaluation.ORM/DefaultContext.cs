@@ -59,11 +59,10 @@ namespace Ambev.DeveloperEvaluation.ORM
                         v => new PhoneNumber(v)));
 
                 entity.Property(e => e.Password)
-                    .HasConversion(new ValueConverter<Password, string>(
-                        v => v.Value,
-                        v => new Password(v)));
+                .HasConversion(new ValueConverter<Password, string>(
+                    v => v.Value,
+                    v => Password.CreateFromHash(v)));
             });
-
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }

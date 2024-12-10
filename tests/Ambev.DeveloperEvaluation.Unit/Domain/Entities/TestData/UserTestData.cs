@@ -1,3 +1,4 @@
+using Ambev.DeveloperEvaluation.Common.Security;
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Enums;
 using Ambev.DeveloperEvaluation.Domain.ValueObjects;
@@ -27,7 +28,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Entities.TestData
                 f.Internet.UserName(),
                 new Email(f.Internet.Email()),
                 new PhoneNumber($"+55{f.Random.Number(11, 99)}{f.Random.Number(100000000, 999999999)}"),
-                new Password($"Test@{f.Random.Number(100, 999)}"),
+                new Password($"Test@{f.Random.Number(100, 999)}", new BCryptPasswordHasher()),
                 f.PickRandom<UserRole>(UserRole.Customer, UserRole.Admin)
             ));
 

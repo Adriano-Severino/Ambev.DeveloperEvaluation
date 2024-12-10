@@ -49,7 +49,7 @@ public class CreateUserHandler : IRequestHandler<CreateUserCommand, CreateUserRe
             throw new InvalidOperationException($"User with email {command.Email} already exists");
 
         var user = _mapper.Map<User>(command);
-        user.SetPassword(new Password(_passwordHasher.HashPassword(command.Password)));
+        user.SetPassword(new Password(command.Password, _passwordHasher));
 
         var createdUser = await _userRepository.CreateAsync(user, cancellationToken);
         var result = _mapper.Map<CreateUserResult>(createdUser);

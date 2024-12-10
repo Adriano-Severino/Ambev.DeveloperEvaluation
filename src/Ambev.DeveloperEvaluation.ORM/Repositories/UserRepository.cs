@@ -53,10 +53,12 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
         /// <returns>The user if found, null otherwise</returns>
         public async Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
         {
-            var users = await _context.Users.AsNoTracking().ToListAsync(cancellationToken);
-            return users.FirstOrDefault(u => u.Email.Value == email);
-        }
+            var users = await _context.Users
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
 
+            return users.FirstOrDefault(u => u.Email.Value.Equals(email, StringComparison.OrdinalIgnoreCase));
+        }
         /// <summary>
         /// Deletes a user from the database
         /// </summary>

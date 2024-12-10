@@ -51,7 +51,7 @@ namespace Ambev.DeveloperEvaluation.Application.Users.UpdateUser
             _mapper.Map(command, existingUser);
 
             // Criação de uma nova instância do objeto de valor Password
-            existingUser.SetPassword(new Password(command.Password));
+            existingUser.SetPassword(new Password(command.Password, _passwordHasher));
 
             var updatedUser = await _userRepository.UpdateAsync(existingUser, cancellationToken);
             var result = _mapper.Map<UpdateUserResult>(updatedUser);

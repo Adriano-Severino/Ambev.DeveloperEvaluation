@@ -47,7 +47,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Application
                 command.Username,
                 new Email(command.Email),
                 new PhoneNumber(command.Phone),
-                new Password(password),
+                Password.CreateFromHash(password),
                 command.Role
             );
 
@@ -108,7 +108,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Application
                 command.Username,
                 new Email(command.Email),
                 new PhoneNumber(command.Phone),
-                new Password(originalPassword), // Use plain text password here
+                Password.CreateFromHash(originalPassword), // Use plain text password here
                 command.Role
             );
 
@@ -117,7 +117,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Application
                 command.Username,
                 new Email(command.Email),
                 new PhoneNumber(command.Phone),
-                new Password(hashedPassword), // Use the hashed password here
+                Password.CreateFromHash(hashedPassword), // Use the hashed password here
                 command.Role
             );
             createdUser.Id = Guid.NewGuid();
@@ -170,7 +170,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Application
                 command.Username,
                 new Email(command.Email),
                 new PhoneNumber(command.Phone),
-                new Password(password),
+                Password.CreateFromHash(password),
                 command.Role
             );
 

@@ -1,3 +1,4 @@
+using Ambev.DeveloperEvaluation.Common.Security;
 using Ambev.DeveloperEvaluation.Common.Validation;
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Enums;
@@ -93,7 +94,7 @@ public class UserTests
 
         try
         {
-            var invalidPassword = new Password(UserTestData.GenerateInvalidPassword());
+            var invalidPassword = new Password(UserTestData.GenerateInvalidPassword(), new BCryptPasswordHasher());
         }
         catch (DomainException ex)
         {
@@ -105,7 +106,7 @@ public class UserTests
             "", // Invalid: empty
             new Email(UserTestData.GenerateValidEmail()),
             new PhoneNumber(UserTestData.GenerateValidPhone()),
-            new Password(UserTestData.GenerateValidPassword()), 
+            new Password(UserTestData.GenerateValidPassword(), new BCryptPasswordHasher()), 
             UserRole.None
         );
 
